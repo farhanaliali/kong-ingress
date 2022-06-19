@@ -69,7 +69,7 @@ kind: Ingress
 metadata:
   name: awesome-ingress
   annotations:
-    networking.gke.io/load-balancer-type: "Internal"
+    kubernetes.io/ingress.class: "gce-internal"
 spec:
   defaultBackend:
     service:
