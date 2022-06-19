@@ -49,4 +49,4 @@ spec:
           service:
             name: whereami-svc
             port:
-              number: 8080
+              number: 8000
