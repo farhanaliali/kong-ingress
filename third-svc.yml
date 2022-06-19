@@ -44,7 +44,7 @@ spec:
   rules:
   - http:
       paths:
-      - path: /
+      - path: /whereami
         pathType: Prefix
         backend:
           service:
