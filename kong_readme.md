@@ -63,6 +63,9 @@ Save and quit
 
 Now install the helm chart with values.yml file 
 
+        helm dependency build
+        helm repo add kong https://charts.konghq.com
+        helm update 
 		helm install kong-ingress-demo . -f values.yaml
 		
 ### LB ip  and port 
@@ -77,32 +80,105 @@ Now install the helm chart with values.yml file
 
 ######### Deployment 
 Create a simple deploymnet 
-
-        kubectl create  deploy demo-app --image=nginx:1.19-alpine 
-        kubectl expose deploy demo-app --type=ClusterIP --port=80
-
-############ Creata a ingress rule 
-vim ingress.yml
-
-            apiVersion: networking.k8s.io/v1
-            kind: Ingress
-            metadata:
-              name: demo-app
-              annotations:
-                konghq.com/strip-path: "true"
-                kubernetes.io/ingress.class: kong
-            spec:
-              rules:
-              - http:
-                  paths:
-                  - path: /
-                    pathType: Prefix
-                    backend:
-                      service:
-                        name: demo-app
-                        port:
-                          number: 80
-
+    
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: hello-deployment
+    spec:
+      selector:
+        matchLabels:
+          app: hello
+      template:
+        metadata:
+          labels:
+            app: hello
+        spec:
+          containers:
+          - name: hello
+            image: gcr.io/google-samples/hello-app:2.0
+            ports:
+            - containerPort: 8080
+    
+    ---
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: hello-service
+    spec:
+      type: ClusterIP
+      selector:
+        app: hello
+      ports:
+      - port: 8000 
+        targetPort: 8080
+    
+    ---
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: nginx
+    spec:
+      selector:
+        matchLabels:
+          app: nginx
+      template:
+        metadata:
+          labels:
+            app: nginx
+        spec:
+          containers:
+          - name: nginx
+            image: nginx
+            ports:
+            - containerPort: 80
+    
+    ---
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: nginxservice
+    spec:
+      type: ClusterIP
+      selector:
+        app: nginx
+      ports:
+      - port: 80 
+        targetPort: 80
+    
+    ---
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+      name: awesome-ingress
+      annotations:
+        konghq.com/strip-path: "true"
+        kubernetes.io/ingress.class: kong
+    
+    spec:
+      defaultBackend:
+        service:
+          name: hello-service
+          port:
+            number: 8000
+      rules:
+      - http:
+          paths:      
+          - path: /hello
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: hello-service
+                port:
+                  number: 8000
+          - path: /nginx
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: nginxservice
+                port:
+                  number: 80
+    
 Save and quit 
 
       kubectl create -f ingress.yml 
