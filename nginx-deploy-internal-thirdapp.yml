@@ -1,97 +1,49 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hello-deployment
+  name: whereami
 spec:
   selector:
     matchLabels:
-      app: hello
+      app: whereami
   template:
     metadata:
       labels:
-        app: hello
+        app: whereami
     spec:
       containers:
-      - name: hello
-        image: gcr.io/google-samples/hello-app:2.0
+      - name: whereami
+        image: gcr.io/google-samples/whereami:v1.2.6
         ports:
         - containerPort: 8080
-
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: hello-service
+  name: whereami-svc
 spec:
   type: ClusterIP
   selector:
-    app: hello
+    app: whereami
   ports:
   - port: 8000 
     targetPort: 8080
-
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nginx
-spec:
-  selector:
-    matchLabels:
-      app: nginx
-  template:
-    metadata:
-      labels:
-        app: nginx
-    spec:
-      containers:
-      - name: nginx
-        image: nginx
-        ports:
-        - containerPort: 80
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: nginxservice
-spec:
-  type: ClusterIP
-  selector:
-    app: nginx
-  ports:
-  - port: 80 
-    targetPort: 80
-
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: awesome-ingress
+  name: third-svs
   annotations:
        nginx.ingress.kubernetes.io/rewrite-target: /
        kubernetes.io/ingress.class: "nginx"
-
 spec:
-  defaultBackend:
-    service:
-      name: hello-service
-      port:
-        number: 8000
   rules:
   - http:
-      paths:      
-      - path: /hello
+      paths:
+      - path: /whereami
         pathType: Prefix
         backend:
           service:
-            name: hello-service
+            name: whereami-svc
             port:
               number: 8000
-      - path: /nginx
-        pathType: Prefix
-        backend:
-          service:
-            name: nginxservice
-            port:
-              number: 80
