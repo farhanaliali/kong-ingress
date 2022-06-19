@@ -92,6 +92,6 @@ spec:
         pathType: ImplementationSpecific
         backend:
           service:
-            name: nginx
+            name: nginxservice
             port:
               number: 80
