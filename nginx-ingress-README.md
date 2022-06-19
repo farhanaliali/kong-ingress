@@ -18,7 +18,8 @@ save and quit
 		helm list
 
 ################### deployment and ingress rule for 2 microservices 
-git clone 
+
+	git clone https://github.com/farhanaliali/kong-ingress.git
 
 kubectl create -f nginx-deploy-internal-apps.yml
 
@@ -192,7 +193,12 @@ your nginx ingress and loadbalacer is created now you can access it form interna
 
 	kubectl run curl -it  --image=curlimages/curl -- sh
 
-	curl {yourLoadbalacer url}
+endpoint 
+/hello
+/nginx
+/whereami
+
+	curl {yourLoadbalacerip}/{endpoints}
 
 
 ############ clean up the resourece 
@@ -204,4 +210,3 @@ your nginx ingress and loadbalacer is created now you can access it form interna
 	helm uninstall nginx-ingress
 
 delete the cluster 
-
