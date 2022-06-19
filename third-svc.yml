@@ -48,6 +48,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: whereami 
+            name: whereami-svc
             port:
               number: 80
