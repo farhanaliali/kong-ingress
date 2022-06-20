@@ -29,7 +29,7 @@ spec:
   selector:
     app: whereami
   ports:
-  - port: 8000 
+  - port: 80
     targetPort: 8080
 ---
 ##ingress.yaml
@@ -44,4 +44,4 @@ spec:
     service:
       name: whereami-svc
       port:
-        number: 8000
+        number: 80
