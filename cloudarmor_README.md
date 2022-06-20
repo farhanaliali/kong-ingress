@@ -20,6 +20,7 @@ kubectl get backendConfig
 Add this annotations 
 
 annotations:
+
                  cloud.google.com/backend-config: '{"ports": {"80":"my-backendconfig"}}'
                  
                  cloud.google.com/neg: '{"ingress": true}'
