@@ -1,0 +1,9 @@
+The following BackendConfig manifest specifies a connection draining timeout of 60 seconds:
+
+apiVersion: cloud.google.com/v1
+kind: BackendConfig
+metadata:
+  name: my-backendconfig
+spec:
+  connectionDraining:
+    drainingTimeoutSec: 60
