@@ -136,7 +136,8 @@ or open in browser
     
 
 ######### View the dashboard   
-        
+ Go to istio installation folder 
+ 
         kubectl apply -f samples/addons
         kubectl rollout status deployment/kiali -n istio-system
 
