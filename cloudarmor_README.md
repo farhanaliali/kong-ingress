@@ -17,7 +17,7 @@ kubectl get backendConfig
 
 
 ############## Create a simple deploymnet with ingress 
-Add this annotations 
+Add this annotations in service
 
 annotations:
 
