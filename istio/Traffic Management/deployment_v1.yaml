@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: node
+    version: v1
+  name: node-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+       app: node
+       version: v1
+
+  template:
+    metadata:
+      labels:
+         app: node
+         version: v1
+    spec:
+      containers:
+      - image: farhanluckali/node-helloworld:2022-06-21--24-10
+        name: node
+        imagePullPolicy: Always
