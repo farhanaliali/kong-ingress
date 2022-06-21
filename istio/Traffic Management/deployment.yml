@@ -1,0 +1,66 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: node
+    version: v1
+  name: node-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+       app: node
+       version: v1
+
+  template:
+    metadata:
+      labels:
+         app: node
+         version: v1
+    spec:
+      containers:
+      - image: farhanluckali/node-helloworld:2022-06-21--24-10
+        name: node
+        imagePullPolicy: Always
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: node
+    version: v2
+  name: node-app-v2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+       app: node
+       version: v2
+
+  template:
+    metadata:
+      labels:
+         app: node
+         version: v2
+    spec:
+      containers:
+      - image:  farhanluckali/node-helloworld:2022-06-21--44-11
+        name: node
+        imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-svc
+  annotations:
+  labels:
+    app: node
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 4001
+    targetPort: 4001
+  selector:
+    app: node
