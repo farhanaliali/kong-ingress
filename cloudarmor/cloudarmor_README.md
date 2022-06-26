@@ -113,6 +113,15 @@ You should see output similar to the following:
 
 ################ testing the service 
 
-  test the service 
+      Get the ingress IP
 
+      curl 15.111.129.182
+Output       
+  
+    <!doctype html><meta charset="utf-8"><meta name=viewport content="width=device-width, initial-scale=1"><title>404</title>404 Not Found
 
+Now curl form allowed Ip 
+
+    curl 34.111.129.174
+
+you service is accessible  form allowed ips only 
