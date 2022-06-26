@@ -1,19 +1,42 @@
 ###  Cloud Armor with https LB
 
+##  Creating cloud armor polices with gcloud 
+
+Creating policies
+
+		gcloud compute security-policies create app-user-policy     --description "policy for external users"  
+adding rule 
+
+		gcloud compute security-policies rules update 2147483647 \     
+			--security-policy app-user-policy \           
+			--action "deny-404"
+
+adding rule 
+
+		gcloud compute security-policies rules create 1000 \
+			--security-policy app-user-policy \
+			--description "allow traffic from 119.160.97.28/32" \
+			--src-ip-ranges "119.160.97.28/32" \
+			--action "allow"
+
+
+
 The following BackendConfig manifest specifies a connection draining timeout of 60 seconds:
 
     kubectl create -f backendConfig.yaml
+
 
     apiVersion: cloud.google.com/v1
     kind: BackendConfig
     metadata:
       name: my-backendconfig
     spec:
+      securityPolicy:
+        name: app-user-policy
+      timeoutSec: 40
       connectionDraining:
         drainingTimeoutSec: 60
 
-
-kubectl get backendConfig
 
 
 ############## Create a simple deploymnet with ingress 
@@ -88,22 +111,8 @@ You should see output similar to the following:
     ingress.kubernetes.io/backends: '{"k8s1-27fde173-default-my-service-80-8d4ca500":"HEALTHY"k8s1-27fde173-kube-system-default-http-backend-80-18dfe76c":"HEALTHY"}
 
 
-Next, inspect the backend service associated with my-service using gcloud. Filter for "drainingTimeoutSec" and "timeoutSec" to confirm that they've been set in the Google Cloud Load Balancer control plane. For example:
+################ testing the service 
 
-# Optionally, set a variable
-    export BES=k8s1-27fde173-default-my-service-80-8d4ca500
-
-# Filter for drainingTimeoutSec and timeoutSec
-    gcloud compute backend-services describe ${BES} --global | grep -e "drainingTimeoutSec" -e "timeoutSec"
+  test the service 
 
 
-Output:
-
-    drainingTimeoutSec: 60
-    timeoutSec: 40
-
-
-####### Cleaning up
-
-    kubectl delete -f cloudarmor.yml
-    kubectl delete -f backendConfig.yaml

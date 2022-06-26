@@ -4,6 +4,8 @@ kind: BackendConfig
 metadata:
   name: my-backendconfig
 spec:
+  securityPolicy:
+    name: app-user-policy
   timeoutSec: 40
   connectionDraining:
     drainingTimeoutSec: 60
